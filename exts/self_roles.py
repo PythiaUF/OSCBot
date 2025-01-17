@@ -46,7 +46,7 @@ class SelfRoles(utils.Extension):
                     emoji=v[1],
                     style=ipy.ButtonStyle.PRIMARY,
                 )
-                for k, v in sorted(self.project_roles.items(), key=lambda x: x[0])
+                for k, v in sorted(self.other_roles.items(), key=lambda x: x[0])
             )
         )
 
