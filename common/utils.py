@@ -30,6 +30,19 @@ def make_embed(description: str) -> ipy.Embed:
     )
 
 
+CommandT = typing.TypeVar("CommandT", ipy.BaseCommand, ipy.const.AsyncCallable)
+
+
+def proper_permissions() -> typing.Callable[[CommandT], CommandT]:
+    async def predicate(ctx: ipy.BaseContext) -> bool:
+        return (
+            ipy.Permissions.ADMINISTRATOR in ctx.author.guild_permissions
+            or ipy.Permissions.MANAGE_MESSAGES in ctx.author.guild_permissions
+        )
+
+    return ipy.check(predicate)
+
+
 async def error_handle(
     error: Exception, *, ctx: typing.Optional[ipy.BaseContext] = None
 ) -> None:
