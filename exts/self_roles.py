@@ -24,16 +24,14 @@ class SelfRoles(utils.Extension):
 
         self.ping_roles_rows = ipy.spread_to_rows(
             *(
-                ipy.ActionRow(
-                    ipy.Button(
-                        label=k,
-                        custom_id=f"rolebutton|{v[0]}",
-                        emoji=v[1],
-                        style=ipy.ButtonStyle.SECONDARY,
-                    )
+                ipy.Button(
+                    label=k,
+                    custom_id=f"rolebutton|{v[0]}",
+                    emoji=v[1],
+                    style=ipy.ButtonStyle.SECONDARY,
                 )
                 for k, v in sorted(self.project_roles.items(), key=lambda x: x[0])
-            ),
+            )
         )
 
         self.other_roles: dict[str, tuple[int, str]] = {
@@ -42,16 +40,14 @@ class SelfRoles(utils.Extension):
 
         self.other_roles_rows = ipy.spread_to_rows(
             *(
-                ipy.ActionRow(
-                    ipy.Button(
-                        label=k,
-                        custom_id=f"rolebutton|{v[0]}",
-                        emoji=v[1],
-                        style=ipy.ButtonStyle.SECONDARY,
-                    )
+                ipy.Button(
+                    label=k,
+                    custom_id=f"rolebutton|{v[0]}",
+                    emoji=v[1],
+                    style=ipy.ButtonStyle.SECONDARY,
                 )
-                for k, v in sorted(self.other_roles.items(), key=lambda x: x[0])
-            ),
+                for k, v in sorted(self.project_roles.items(), key=lambda x: x[0])
+            )
         )
 
     @prefixed.prefixed_command()
