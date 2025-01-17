@@ -28,7 +28,7 @@ class SelfRoles(utils.Extension):
                     label=k,
                     custom_id=f"rolebutton|{v[0]}",
                     emoji=v[1],
-                    style=ipy.ButtonStyle.SECONDARY,
+                    style=ipy.ButtonStyle.PRIMARY,
                 )
                 for k, v in sorted(self.project_roles.items(), key=lambda x: x[0])
             )
@@ -44,7 +44,7 @@ class SelfRoles(utils.Extension):
                     label=k,
                     custom_id=f"rolebutton|{v[0]}",
                     emoji=v[1],
-                    style=ipy.ButtonStyle.SECONDARY,
+                    style=ipy.ButtonStyle.PRIMARY,
                 )
                 for k, v in sorted(self.project_roles.items(), key=lambda x: x[0])
             )
@@ -145,13 +145,13 @@ class SelfRoles(utils.Extension):
             if member.has_role(role):
                 await member.remove_role(role)
                 await ctx.send(
-                    embeds=utils.make_embed(f"Removed `{role.mention}`."),
+                    embeds=utils.make_embed(f"Removed `{role.name}`."),
                     ephemeral=True,
                 )
             else:
                 await member.add_role(role)
                 await ctx.send(
-                    embeds=utils.make_embed(f"Added `{role.mention}`."), ephemeral=True
+                    embeds=utils.make_embed(f"Added `{role.name}`."), ephemeral=True
                 )
 
 
