@@ -84,7 +84,9 @@ class SayCMDs(utils.Extension):
         try:
             msg = await channel.send(content, files=files_to_upload)
             if channel != ctx.channel:
-                await ctx.reply(f"Sent. See it at: {msg.jump_url}")
+                await ctx.reply(
+                    embeds=utils.make_embed(f"Sent! See it at {msg.jump_url}.")
+                )
         finally:
             for ipy_file in files_to_upload:
                 ipy_file.file.close()
@@ -211,7 +213,9 @@ class SayCMDs(utils.Extension):
         try:
             msg = await message.edit(content=content, files=files_to_upload)
             if msg.channel != ctx.channel:
-                await ctx.reply(f"Edited. See it at: {msg.jump_url}")
+                await ctx.reply(
+                    embeds=utils.make_embed(f"Edited! See it at {msg.jump_url}.")
+                )
         finally:
             if files_to_upload:
                 for ipy_file in files_to_upload:
@@ -222,31 +226,56 @@ class SayCMDs(utils.Extension):
         ctx = event.ctx
 
         if ctx.custom_id.startswith("raw-embed-say"):
+            await ctx.defer(ephemeral=True)
+
             channel_id = int(ctx.custom_id.split("|")[1])
             channel = await self.bot.fetch_channel(channel_id)
             if not channel:
-                await ctx.send("Could not get channel.", ephemeral=True)
+                await ctx.send(
+                    embeds=utils.error_embed_generate("Could not get channel."),
+                    ephemeral=True,
+                )
                 return
 
             try:
+                if len(ctx.responses["embed-say"]) > 7000:
+                    await ctx.send(
+                        embeds=utils.error_embed_generate(
+                            "Could not parse the raw embed."
+                        ),
+                        ephemeral=True,
+                    )
+                    return
+
                 embed_dict: dict = orjson.loads(ctx.responses["embed-say"])
             except orjson.JSONDecodeError:
-                await ctx.send("Could not parse the raw embed.", ephemeral=True)
+                await ctx.send(
+                    embeds=utils.error_embed_generate("Could not parse the raw embed."),
+                    ephemeral=True,
+                )
                 return
 
             if embeds := embed_dict.get("embeds"):
                 embed_dict = embeds[0]
 
             msg = await channel.send(embed=embed_dict)
-            await ctx.send(f"Sent. See it at: {msg.jump_url}", ephemeral=True)
+            await ctx.send(
+                embeds=utils.make_embed(f"Sent! See it at {msg.jump_url}."),
+                ephemeral=True,
+            )
 
         elif ctx.custom_id.startswith("raw-embed-edit"):
+            await ctx.defer(ephemeral=True)
+
             msg_id = int(ctx.custom_id.split("|")[1])
 
             try:
                 embed_dict: dict = orjson.loads(ctx.responses["embed-edit"])
             except orjson.JSONDecodeError:
-                await ctx.send("Could not parse the raw embed.", ephemeral=True)
+                await ctx.send(
+                    embeds=utils.error_embed_generate("Could not parse the raw embed."),
+                    ephemeral=True,
+                )
                 return
 
             if embeds := embed_dict.get("embeds"):
@@ -255,29 +284,45 @@ class SayCMDs(utils.Extension):
             message = await ctx.channel.fetch_message(msg_id)
             if message:
                 await message.edit(embed=embed_dict)
-                await ctx.send("Edited.", ephemeral=True)
+                await ctx.send(embeds=utils.make_embed("Edited!"), ephemeral=True)
             else:
-                await ctx.send("Could not get message.", ephemeral=True)
+                await ctx.send(
+                    embeds=utils.error_embed_generate("Could not get message."),
+                    ephemeral=True,
+                )
 
         elif ctx.custom_id.startswith("say-cmd"):
+            await ctx.defer(ephemeral=True)
+
             channel_id = int(ctx.custom_id.split("|")[1])
             channel = await self.bot.fetch_channel(channel_id)
             if not channel:
-                await ctx.send("Could not get channel.", ephemeral=True)
+                await ctx.send(
+                    embeds=utils.error_embed_generate("Could not get channel."),
+                    ephemeral=True,
+                )
                 return
 
             msg = await channel.send(content=ctx.responses["say-content"])
-            await ctx.send(f"Sent. See it at: {msg.jump_url}", ephemeral=True)
+            await ctx.send(
+                embeds=utils.make_embed(f"Sent! See it at {msg.jump_url}."),
+                ephemeral=True,
+            )
 
         elif ctx.custom_id.startswith("edit-message"):
+            await ctx.defer(ephemeral=True)
+
             msg_id = int(ctx.custom_id.split("|")[1])
             message = await ctx.channel.fetch_message(msg_id)
             if not message:
-                await ctx.send("Could not get message.", ephemeral=True)
+                await ctx.send(
+                    embeds=utils.error_embed_generate("Could not get message."),
+                    ephemeral=True,
+                )
                 return
 
             await message.edit(content=ctx.responses["edit-content"])
-            await ctx.send("Edited.", ephemeral=True)
+            await ctx.send(embeds=utils.make_embed("Edited!"), ephemeral=True)
 
 
 def setup(bot: utils.OSCBotBase) -> None:
