@@ -36,6 +36,7 @@ class SelfRoles(utils.Extension):
 
         self.other_roles: dict[str, tuple[int, str]] = {
             "Archive Viewer": (1235104106855665716, "📜"),
+            "Soccer": (1205300430335115285, "⚽️"),
         }
 
         self.other_roles_rows = ipy.spread_to_rows(
