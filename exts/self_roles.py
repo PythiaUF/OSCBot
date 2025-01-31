@@ -12,10 +12,10 @@ class SelfRoles(utils.Extension):
         self.name = "Self Role"
 
         self.project_roles: dict[str, tuple[int, str]] = {
-            "Alarm Clock": (1200207061363998810, "⏰"),
             "Bytes of Love": (1153818324745072650, "❤️"),
             "Drone": (1283182169254006845, "🚁"),
             "Echo (Proximity Chat)": (1154561197241278524, "📳"),
+            "Hide and Seek": (1334975866932826227, "🔍"),
             "Jukebox": (1153816806654492672, "🎶"),
             "OSC Website": (1025121321677488129, "🖥️"),
             "Terminal Monopoly": (1283182183816892579, "💰"),
