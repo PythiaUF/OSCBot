@@ -12,8 +12,12 @@ class SelfRoles(utils.Extension):
         self.name = "Self Role"
 
         self.project_roles: dict[str, tuple[int, str]] = {
-            "OSC Website": (1025121321677488129, "🖥️"),
+            "Jukebox": (1153816806654492672, "🎶"),
+            "OSC Workout": (1417623455443980439, "💪"),
+            "Studygachi": (1417623653344084060, "👾"),
+            "Terminal Casino": (1417623539355484223, "🎰"),
             "Terminal Monopoly": (1283182183816892579, "💰"),
+            "UF r/place": (1417623564894343370, "🖼️"),
         }
 
         self.ping_roles_rows = ipy.spread_to_rows(
